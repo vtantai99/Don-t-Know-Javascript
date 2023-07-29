@@ -6,16 +6,16 @@ const getPost = async (id) => {
   return await (await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`)).json()
 }
 
-// const runWithFor = async () => {
-//   console.log("Tai Vo 🚀 ~ START-LOOP")
-//   for (let index = 0; index < array.length; index++) {
-//     const data = await getPost(index + 1)
-//     console.log("Tai Vo 🚀 ~ data", data)
-//   }
-//   console.log("Tai Vo 🚀 ~ END-LOOP")
-// }
+const runWithFor = async () => {
+  console.log("Tai Vo 🚀 ~ START-LOOP")
+  for (let index = 0; index < array.length; index++) {
+    const data = await getPost(index + 1)
+    console.log("Tai Vo 🚀 ~ data", data)
+  }
+  console.log("Tai Vo 🚀 ~ END-LOOP")
+}
 
-// runWithFor()
+runWithFor()
 
 const runWithForEach = () => {
   console.log("Tai Vo 🚀 ~ START-LOOP")
