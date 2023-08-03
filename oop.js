@@ -80,6 +80,7 @@ Object.defineProperty(this, 'defaultLocation', {
 // ----------- Prototype -----------
 // Every object (except the root object) has a prototype (parent).
 // To get the prototype of an object:
+const obj = {}
 Object.getPrototypeOf(obj);
 
 // In Chrome, you can inspect "__proto__" property. But you should not use that in the code.
@@ -218,3 +219,205 @@ const elements = [new HtmlSelectElement([1, 2, 3]), new HtmlImageElement("http:/
 
 for (let element of elements) console.log(element.render());
 // ----------- End Polymorphism -----------
+
+
+
+// Practice our Pillars of OOP
+// 1. Encapsulation: Reduce complexity + increase reusability
+// In JavaScript, encapsulation is a concept used in object-oriented programming (OOP) to bundle data (properties) and the methods (functions) that operate on that data within a single unit called an object.
+// Encapsulation helps in organizing code, preventing unauthorized access to data, and reducing the complexity of the overall program.
+const person = {
+  name: 'John',
+  age: 30,
+  getAge: function() {
+    return this.age;
+  },
+  setAge: function(newAge) {
+    this.age = newAge;
+  }
+};
+// console.log('Tai Vo 🚀 ~ person:', person.getAge())
+
+class PersonV2 {
+  constructor(name, age) {
+    this.name = name;
+    let _age = age; // Private variable
+
+    this.getAge = function() {
+      return _age;
+    };
+
+    this.setAge = function(newAge) {
+      _age = newAge;
+    };
+  }
+}
+
+const personV2 = new PersonV2('John', 30);
+// console.log('Tai Vo 🚀 ~ personV2:', personV2)
+
+// 2. Abstraction: Reduce complexity + isolate impact of changes
+// Abstraction is another important concept in object-oriented programming (OOP) that is also applicable to JavaScript.
+// It is the process of hiding the implementation details of an object and exposing only the essential features or functionalities to the outside world.
+// Abstraction allows you to create a simplified interface for using an object, making it easier to understand and work with.
+class ShapeV2 {
+  constructor() {
+    if (new.target === ShapeV2) {
+      throw new Error('Tai Vo => ShapeV2 class cannot be instantiated directly.');
+    }
+  }
+
+  // Abstract method
+  draw() {
+    throw new Error('Tai Vo => Method draw() must be implemented in the subclass.');
+  }
+
+  // Concrete method
+  calculateArea() {
+    return 1
+    // Some default implementation for calculating area
+  }
+}
+
+class CircleV2 extends ShapeV2 {
+  constructor(radius) {
+    super();
+    this.radius = radius;
+  }
+
+  draw() {
+    // Implementation for drawing a circle
+  }
+}
+
+const circleV2 = new CircleV2(10)
+// ----------------------------------
+// Hiding Implementation Details
+function createPerson(name, age) {
+  let _name = name; // Private variable
+  let _age = age; // Private variable
+
+  return {
+    getName: function() {
+      return _name;
+    },
+    setName: function(newName) {
+      _name = newName;
+    },
+    getAge: function() {
+      return _age;
+    }
+  };
+}
+
+const personCreated = createPerson('John', 30);
+console.log(personCreated.getName()); // "John"
+personCreated.setName('Mike');
+console.log(personCreated.getName()); // "Mike"
+
+// 3. Inheritance: Eliminate redundant code
+// Inheritance is a fundamental concept in object-oriented programming (OOP) that allows a class (or constructor function) to inherit properties and methods from another class.
+// In JavaScript, inheritance can be achieved through prototypes, ES6 classes, or object linking. 
+// Parent object constructor
+function Animal(name) {
+  this.name = name;
+}
+// Prototype-based Inheritance ---------------------------
+// Adding a method to the prototype of Animal
+Animal.prototype.sayHello = function() {
+  console.log(`Tai Vo => Hello, I'm ${this.name}`);
+};
+
+// Child object constructor inheriting from Animal
+function Dog(name, breed) {
+  Animal.call(this, name); // Call the Animal constructor to set the 'name'
+  this.breed = breed;
+}
+
+// Linking the prototype of Dog to the prototype of Animal
+Dog.prototype = Object.create(Animal.prototype);
+Dog.prototype.constructor = Dog;
+
+// Adding a method to the prototype of Dog
+Dog.prototype.bark = function() {
+  console.log('Tai Vo => Woof! Woof!');
+};
+
+const myDog = new Dog('Buddy', 'Golden Retriever');
+myDog.sayHello(); // "Hello, I'm Buddy"
+myDog.bark();     // "Woof! Woof!"
+
+// ES6 Class-based Inheritance -----------------------------
+class AnimalV2 {
+  constructor(name) {
+    this.name = name;
+  }
+
+  sayHello() {
+    console.log(`Hello, I'm ${this.name}`);
+  }
+}
+
+class DogV2 extends AnimalV2 {
+  constructor(name, breed) {
+    super(name); // Call the constructor of the parent class to set the 'name'
+    this.breed = breed;
+  }
+
+  bark() {
+    console.log('Woof! Woof!');
+  }
+}
+
+const myDogV2 = new DogV2('Buddy', 'Golden Retriever');
+myDog.sayHello(); // "Hello, I'm Buddy"
+myDog.bark();     // "Woof! Woof!"
+
+
+// 4. Polymorphism: Refactor ugly switch/case statements
+
+// Parent class
+class AnimalP {
+  constructor(name) {
+    this.name = name;
+  }
+
+  makeSound() {
+    console.log("AnimalP makes a sound");
+  }
+}
+
+// Child class inheriting from AnimalP
+class DogP extends AnimalP {
+  constructor(name, breed) {
+    super(name);
+    this.breed = breed;
+  }
+
+  makeSound() {
+    console.log("DogP barks");
+  }
+}
+
+// Child class inheriting from Animal
+class CatP extends AnimalP {
+  constructor(name, breed) {
+    super(name);
+    this.breed = breed;
+  }
+
+  makeSound() {
+    console.log("CatP meows");
+  }
+}
+
+// Function that accepts an Animal object and invokes its makeSound method
+function animalSound(animal) {
+  animal.makeSound();
+}
+
+const myDogP = new DogP('Buddy', 'Golden Retriever');
+const myCatP = new CatP('Whiskers', 'Siamese');
+
+animalSound(myDogP); // Output: "Dog barks"
+animalSound(myCatP); // Output: "Cat meows"
